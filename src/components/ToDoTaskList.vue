@@ -13,10 +13,10 @@ const props = defineProps<{
 watch(()=>props.title, (title: string)=> {
     if (title != '') {
         taskList.value.push({
-            id: ++id.value,
+            id: id.value++,
             title: title,
             done: false,
-            createdAt: 23,
+            createdAt: new Date().toISOString().split('T')[0] ?? '',
         });
     }
 });

@@ -12,5 +12,5 @@ const setTask = (title: string)=> {
 
 <template>
     <Form @title="setTask"/>
-    <ToDoTaskList class="mt-20" :title="data"/>
+    <ToDoTaskList class="mt-30" :title="data"/>
 </template>

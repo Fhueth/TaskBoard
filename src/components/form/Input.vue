@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    (e: 'validity', name: Field, valid: boolean): void
+    (e: 'validity', name: Field, valid: boolean, inputValue: string): void
 }>();
 
 const value = ref<string>("");
@@ -17,7 +17,7 @@ const valid = ref<boolean>(false);
 
 watch(value, ()=>{
     valid.value = value.value.length > 3;
-    emit('validity', props.name, valid.value);
+    emit('validity', props.name, valid.value, value.value);
 });
 
 </script>

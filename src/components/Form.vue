@@ -8,13 +8,19 @@ const form = reactive({
     name: { value: '', valid: false },
 });
 
-const check = (field: Field, valid: boolean) => {
+const emit = defineEmits<{
+    (e: 'title', title: string): void
+}>();
+
+const check = (field: Field, valid: boolean, inputValue: string) => {
     form[field].valid = valid
+    form[field].value = inputValue
 }
 const submit = ()=> {
     if(!Object.values(form).every((f) => f.valid)) {
         return;
     }
+    emit('title', form.name.value);
 }
 
 </script>

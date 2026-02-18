@@ -3,9 +3,8 @@ import { onMounted, ref, watch } from 'vue';
 import type { Task } from '../types/Task';
 import ToDoTask from './ToDoTask.vue';
 
-const id = ref<number>(0);
 const taskList = ref<Task[]>([]);
-
+const id = ref<number>(taskList.value.length === 0 ? 0 : taskList.value.length-1);
 const props = defineProps<{
     title: string,
 }>();
@@ -26,7 +25,7 @@ watch(()=>props.title, (title: string)=> {
     }
 });
 const deleteTaskFromList = (id: number)=> {
-    taskList.value.splice(id, 1);
+    taskList.value.splice(taskList.value.findIndex(task => task.id === id), 1);
     save();
 }
 onMounted(()=>{

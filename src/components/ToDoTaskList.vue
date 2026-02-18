@@ -35,7 +35,7 @@ onMounted(()=>{
 </script>
 
 <template>
-    <section class="flex flex-wrap gap-2.5 overflow">
+    <section class="flex flex-wrap gap-2.5 overflow justify-center items-center p-10">
         <ToDoTask @deleteTask="deleteTaskFromList" v-for="task in taskList" :key="task.id" :task="task"/>
     </section>
 </template>

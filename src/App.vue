@@ -3,14 +3,14 @@ import { ref } from 'vue';
 import Form from './components/Form.vue';
 import ToDoTaskList from './components/ToDoTaskList.vue';
 
-const data = ref<string>('');
+const taskListRef = ref<InstanceType<typeof ToDoTaskList> | null>(null);
 const setTask = (title: string)=> {
-    data.value = title;
+    taskListRef.value?.addTask(title)
 }
 </script>
 
 
 <template>
     <Form @title="setTask"/>
-    <ToDoTaskList class="mt-30" :title="data"/>
+    <ToDoTaskList ref="taskListRef" class="mt-30"/>
 </template>

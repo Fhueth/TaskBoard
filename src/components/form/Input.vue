@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    (e: 'validity', name: Field, valid: boolean, inputValue: string): void
+    validity: [name: Field, valid: boolean, inputValue: string]
 }>();
 
 const value = ref<string>("");

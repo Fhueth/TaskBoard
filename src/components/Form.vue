@@ -9,7 +9,7 @@ const form = reactive({
 });
 
 const emit = defineEmits<{
-    (e: 'title', title: string): void
+    title: [title: string]
 }>();
 
 const check = (field: Field, valid: boolean, inputValue: string) => {

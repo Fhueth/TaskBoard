@@ -18,16 +18,15 @@ const addTask = (title: string)=> {
         id: id,
         title: title,
         done: false,
-        createdAt: new Date().toISOString().split('T')[0] ?? '',
     };
     taskList.value.set(id, tasksList);
     save();
 }
-const arrayTasks = computed(()=>Array.from(taskList.value.values()).sort((a, b) => Number(b.done) - Number(a.done)))
+const arrayTasks = computed(()=>Array.from(taskList.value.values()).sort((a, b) => Number(a.done) - Number(b.done)))
 defineExpose({
     addTask
 })
-const saveTask = (id: number, task: Task)=> {
+const saveTask = (task: Task)=> {
     taskList.value.set(task.id, task);
     save()
 }

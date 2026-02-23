@@ -5,7 +5,7 @@ import ToDoTask from './ToDoTask.vue';
 
 const taskList = ref<Map<number, Task>>(new Map());
 const save = () => {
-    localStorage.setItem('tasks', JSON.stringify(arrayTasks.value));
+    localStorage.setItem('tasks', JSON.stringify(Array.from(taskList.value.values())));
 }
 const get = () => {
     return new Map(
@@ -20,15 +20,16 @@ const addTask = (title: string)=> {
         done: false,
         createdAt: new Date().toISOString().split('T')[0] ?? '',
     };
-    taskList.value.set(Date.now(), tasksList);
+    taskList.value.set(id, tasksList);
     save();
 }
-const arrayTasks = computed(()=>Array.from(taskList.value.values()))
+const arrayTasks = computed(()=>Array.from(taskList.value.values()).sort((a, b) => Number(b.done) - Number(a.done)))
 defineExpose({
     addTask
 })
 const saveTask = (id: number, task: Task)=> {
-    taskList.value.set(id, task);
+    taskList.value.set(task.id, task);
+    save()
 }
 const deleteTaskFromList = (id: number)=> {
     taskList.value.delete(id);
@@ -41,7 +42,7 @@ onMounted(()=>{
 </script>
 
 <template>
-    <section class="flex flex-wrap gap-2.5 overflow justify-center items-center p-10">
-        <ToDoTask @editTask="saveTask" @deleteTask="deleteTaskFromList" v-for="(task, index) in arrayTasks" :key="index+1" :task="task"/>
+    <section class="flex flex-col w-[min(80%,1000px)] gap-5">
+        <ToDoTask @editTask="saveTask" @deleteTask="deleteTaskFromList" v-for="task in arrayTasks" :key="task.id" :task="task"/>
     </section>
 </template>

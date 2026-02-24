@@ -12,6 +12,14 @@ const emit = defineEmits<{
     validity: [name: Field, valid: boolean, inputValue: string]
 }>();
 
+const resetValue = ()=> {
+    value.value = '';
+}
+
+defineExpose({
+    resetValue
+})
+
 const value = ref<string>("");
 const valid = ref<boolean>(false);
 

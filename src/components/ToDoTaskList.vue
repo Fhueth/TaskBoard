@@ -118,31 +118,43 @@ const onDrop = (event: DragEvent) => {
 
 </script>
 <template>
-    <section v-if="arrayTasks.length >= 1" class="flex flex-col w-[min(80%,1000px)] gap-5">
-        <div class="grid grid-cols-[1fr_auto_auto_auto] px-5 gap-3">
-            <input v-model="search" name="search" id="search" type="text" class="w-50 border-2 rounded-3xl">
+    <div v-if="taskList.size >= 1" class="flex flex-col w-[min(80%,1000px)] gap-12">
+        <div class="grid grid-cols-[1fr_auto_auto_auto] px-5 gap-3 items-center">
+            <label class="w-50 border-2 relative rounded-3xl flex">
+                <Icon color="#000" width="24" height="24" type="search" class="absolute left-2 top-1/2 -translate-y-1/2" />
+                <input v-model="search" name="search" id="search" type="text" class="size-full py-3 pl-10 px-4 focus:outline-none">
+                <button @click="search = ''" v-show="search !== ''" class="size-fit absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer">
+                    <Icon color="#000" width="16" height="16" type="delete" class="in-hover:rotate-90" />
+                </button>
+            </label>
             <label class="px-5 py-2 bg-amber-200 flex rounded-3xl gap-2 items-center">
-                <Icon color="#000" type="upload"/>
+                <Icon color="#000" width="24" height="24" type="upload"/>
                 <p>Importa tus tareas aquí</p>
                 <input type="file" accept=".csv" @change="handleFileUpload" class="size-0"/>
             </label>
             <button @click="exportCSV" class="size-10 cursor-pointer">
-                <Icon color="#000" type="export" />
+                <Icon color="#000" width="24" height="24" type="export" />
             </button>
             <button @click="deleteAll" class="size-10 cursor-pointer">
-                <Icon color="#000" type="deleteAll" />
+                <Icon color="#000" width="24" height="24" type="deleteAll" />
             </button>
         </div>
-        <ToDoTask @editTask="saveTask" @deleteTask="deleteTaskFromList" v-for="task in arrayTasks" :key="task.id"
+        <section v-if="arrayTasks.length >= 1">
+            <ToDoTask @editTask="saveTask" @deleteTask="deleteTaskFromList" v-for="task in arrayTasks" :key="task.id"
             :task="task" />
-    </section>
+        </section>
+        <div class="flex px-6 py-4 gap-3 justify-center items-center bg-red-300 border border-red-400 rounded-2xl size-fit self-center" v-else>
+            <Icon color="#000" width="16" height="16" type="info" />
+            <p class="">No hemos encontrado ninguna tarea llamada "{{ search }}"</p>
+        </div>
+    </div>
     <label
     v-else 
     @dragover.prevent="onDragOver"
     @dragleave="onDragLeave"
     @drop.prevent="onDrop"
     class=" hover:bg-neutral-200 transition-colors duration-100 cursor-pointer outline-2 outline-neutral-300 outline-dashed px-26 py-16 bg-neutral-100 rounded-2xl flex flex-col items-center">
-        <Icon color="#000" type="upload"/>
+        <Icon width="24" height="24" color="#000" type="upload"/>
         <p>Crea tu primera tarea</p>
         <p>O</p>
         <p><strong>Clica aquí para importar</strong> / arrastra y suelta</p>

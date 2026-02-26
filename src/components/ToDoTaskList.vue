@@ -118,12 +118,12 @@ const onDrop = (event: DragEvent) => {
 
 </script>
 <template>
-    <div v-if="taskList.size >= 1" class="flex flex-col w-[min(80%,1000px)] gap-12">
-        <div class="grid grid-cols-[1fr_auto_auto_auto] px-5 gap-3 items-center">
+    <div v-if="taskList.size >= 1" class="flex flex-col w-[min(80%,1000px)] gap-8">
+        <div class="grid grid-cols-[1fr_auto_auto_auto] px-5 gap-3 items-center pb-4 border-b">
             <label class="w-50 border-2 relative rounded-3xl flex">
                 <Icon color="#000" width="24" height="24" type="search" class="absolute left-2 top-1/2 -translate-y-1/2" />
                 <input v-model="search" name="search" id="search" type="text" class="size-full py-3 pl-10 px-4 focus:outline-none">
-                <button @click="search = ''" v-show="search !== ''" class="size-fit absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer">
+                <button title="Borrar" @click="search = ''" v-show="search !== ''" class="size-fit absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer">
                     <Icon color="#000" width="16" height="16" type="delete" class="in-hover:rotate-90" />
                 </button>
             </label>
@@ -132,10 +132,10 @@ const onDrop = (event: DragEvent) => {
                 <p>Importa tus tareas aquí</p>
                 <input type="file" accept=".csv" @change="handleFileUpload" class="size-0"/>
             </label>
-            <button @click="exportCSV" class="size-10 cursor-pointer">
+            <button title="Exportar CSV" @click="exportCSV" class="size-10 cursor-pointer">
                 <Icon color="#000" width="24" height="24" type="export" />
             </button>
-            <button @click="deleteAll" class="size-10 cursor-pointer">
+            <button title="Eliminar todo" @click="deleteAll" class="size-10 cursor-pointer">
                 <Icon color="#000" width="24" height="24" type="deleteAll" />
             </button>
         </div>
@@ -145,7 +145,7 @@ const onDrop = (event: DragEvent) => {
         </section>
         <div class="flex px-6 py-4 gap-3 justify-center items-center bg-red-300 border border-red-400 rounded-2xl size-fit self-center" v-else>
             <Icon color="#000" width="16" height="16" type="info" />
-            <p class="">No hemos encontrado ninguna tarea llamada "{{ search }}"</p>
+            <p class="">No se ha encontrado ninguna tarea llamada "{{ search }}"</p>
         </div>
     </div>
     <label

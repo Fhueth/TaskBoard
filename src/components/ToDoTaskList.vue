@@ -4,8 +4,10 @@ import type { Task } from '../types/Task';
 import Papa from 'papaparse';
 import ToDoTask from './ToDoTask.vue';
 import Icon from './form/Icon.vue';
+import Dialog from './Dialog.vue';
 
 const taskList = ref<Map<number, Task>>(new Map());
+const dialog = ref<InstanceType<typeof Dialog> | null>(null);
 const search = ref<string>('');
 const save = () => {
     localStorage.setItem('tasks', JSON.stringify(Array.from(taskList.value.values())));
@@ -61,6 +63,7 @@ const deleteAll = () => {
     taskList.value.clear();
     save()
 }
+const getDialog = (value: boolean) => value;
 
 const handleFileUpload = (event: Event) => {
     const input = event.target as HTMLInputElement
@@ -71,17 +74,19 @@ const handleFileUpload = (event: Event) => {
         header: true,
         skipEmptyLines: true,
         dynamicTyping: true,
-        complete: (results) => {
+        complete: async (results) => {
             const rows = results.data as Task[]
             if (!rows.length) {
                 alert('CSV vacío o inválido.')
                 return
             }
             if (taskList.value.size > 0) {
-                const replace = window.confirm(
-                    'Ya existen tareas. ¿Quieres reemplazarlas? (Cancelar = añadir)'
-                )
-                if (replace) taskList.value.clear()
+                const decision = await dialog.value?.tryRequest();
+                if (decision === 'cancel') {
+                    input.value = '';
+                    return;
+                } 
+                if (decision === 'replace') taskList.value.clear()
             }
             rows.forEach((task) => {
                 let id = task.id
@@ -127,7 +132,7 @@ const onDrop = (event: DragEvent) => {
                     <Icon color="#000" width="16" height="16" type="delete" class="in-hover:rotate-90" />
                 </button>
             </label>
-            <label class="px-5 py-2 bg-amber-200 flex rounded-3xl gap-2 items-center">
+            <label class="px-5 py-2 bg-amber-200 flex rounded-3xl gap-2 items-center cursor-pointer">
                 <Icon color="#000" width="24" height="24" type="upload"/>
                 <p>Importa tus tareas aquí</p>
                 <input type="file" accept=".csv" @change="handleFileUpload" class="size-0"/>
@@ -147,6 +152,7 @@ const onDrop = (event: DragEvent) => {
             <Icon color="#000" width="16" height="16" type="info" />
             <p class="">No se ha encontrado ninguna tarea llamada "{{ search }}"</p>
         </div>
+        <Dialog ref="dialog" @send="getDialog"/>
     </div>
     <label
     v-else 
